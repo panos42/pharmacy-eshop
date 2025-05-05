@@ -5,7 +5,8 @@ const productSchema = new mongoose.Schema({
   price: Number,
   category: String,
   description: String,
-  inStock: Boolean
+  inStock: Boolean,
+  tags: [String]  // Add tags array to the schema
 });
 
 module.exports = mongoose.model('Product', productSchema);

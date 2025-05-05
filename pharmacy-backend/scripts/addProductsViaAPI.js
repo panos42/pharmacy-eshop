@@ -9,16 +9,18 @@ const pharmacyProducts = [
     price: 6.99,
     category: "Pain Relief",
     description: "Pain reliever and fever reducer for adults and children over 12 years. Relieves minor aches and pains due to headache, muscular aches, backache, minor arthritis pain, toothache, and menstrual cramps.",
-    inStock: true
+    inStock: true,
+    tags: ["pain relief", "anti-inflammatory", "fever reducer", "OTC"]
   },
   {
     name: "Acetaminophen 500mg",
     price: 5.49,
     category: "Pain Relief",
     description: "Pain reliever and fever reducer for adults and children over 12 years. Used for temporary relief of minor aches and pains due to headache, muscular aches, backache, minor arthritis pain, toothache, and menstrual cramps.",
-    inStock: true
+    inStock: true,
+    tags: ["pain relief", "fever reducer", "OTC", "headache"]
   },
-  // Include more products (same as in the populateProducts.js script)
+  // Include more products (same as in the populateProducts.js script with tags)
 ];
 
 async function addProducts() {

@@ -1,4 +1,4 @@
-// Navbar.js - Complete update
+// Navbar.js - Updated with search bar
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/navbar.css';
@@ -6,6 +6,7 @@ import '../styles/navbar.css';
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAdminDropdownOpen, setIsAdminDropdownOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
   const isLoggedIn = !!localStorage.getItem('token');
   const isAdmin = localStorage.getItem('isAdmin') === 'true';
@@ -26,12 +27,39 @@ const Navbar = () => {
     setIsAdminDropdownOpen(!isAdminDropdownOpen);
   };
 
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+      setIsMenuOpen(false); // Close mobile menu if open
+    }
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">
           Pharmacy Plus
         </Link>
+        
+        <div className="search-container">
+          <form onSubmit={handleSearchSubmit}>
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="search-input"
+            />
+            <button type="submit" className="search-button">
+              <i className="fas fa-search"></i>
+            </button>
+          </form>
+        </div>
         
         <div className="menu-icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           <i className={isMenuOpen ? 'fas fa-times' : 'fas fa-bars'} />

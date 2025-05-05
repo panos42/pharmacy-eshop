@@ -1,11 +1,36 @@
+// routes/products.js - Updated with search functionality
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
 
-// GET all products
+// GET all products with optional search
 router.get('/', async (req, res) => {
-  const products = await Product.find();
-  res.json(products);
+  try {
+    const { search } = req.query;
+    
+    if (search) {
+      // If there's a search query, perform a search across multiple fields
+      const searchRegex = new RegExp(search, 'i'); // Case-insensitive search
+      
+      const products = await Product.find({
+        $or: [
+          { name: searchRegex },
+          { description: searchRegex },
+          { category: searchRegex },
+          { tags: searchRegex }
+        ]
+      });
+      
+      return res.json(products);
+    }
+    
+    // If no search query, return all products
+    const products = await Product.find();
+    res.json(products);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
 // POST create new product
@@ -14,7 +39,6 @@ router.post('/', async (req, res) => {
   const saved = await newProduct.save();
   res.status(201).json(saved);
 });
-
 
 // GET product by ID
 router.get('/:id', async (req, res) => {
