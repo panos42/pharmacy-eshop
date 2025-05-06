@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
 const User = require('../models/User');
-// You'll need to create these models
 const Order = require('../models/Order');
 const Visit = require('../models/Visit');
 
@@ -93,9 +92,33 @@ router.get('/', async (req, res) => {
       { name: 'One-time Buyers', percentage: Math.round((oneTimeCount / totalCustomers) * 100) || 0 }
     ];
     
-    // For simplicity, we'll return static marketing data for now
-    // In a real app, you'd calculate this from real data
-    const marketingEffectiveness = [
+    // Updated marketing effectiveness calculation based on real data
+    const marketingEffectiveness = await Visit.aggregate([
+      { $match: { date: { $gte: startDate, $lte: endDate }, source: { $exists: true } } },
+      { $group: {
+          _id: "$source",
+          visits: { $sum: 1 },
+          conversions: { $sum: { $cond: [ "$isConversion", 1, 0 ] } }
+        }
+      },
+      { $project: {
+          _id: 0,
+          channel: "$_id",
+          conversion: { 
+            $concat: [{ $toString: { $multiply: [{ $divide: ["$conversions", "$visits"] }, 100] } }, "%"] 
+          },
+          // For ROI calculation, you'd need cost data - this is simplified
+          roi: { 
+            $concat: [{ $toString: { $multiply: [{ $divide: ["$conversions", "$visits"] }, 300] } }, "%"] 
+          }
+        }
+      },
+      { $sort: { conversions: -1 } },
+      { $limit: 3 }
+    ]);
+    
+    // If no marketing data, provide fallback
+    const defaultMarketingData = [
       { channel: 'Email', conversion: '4.2%', roi: '320%' },
       { channel: 'Social Media', conversion: '2.8%', roi: '180%' },
       { channel: 'Search Ads', conversion: '3.5%', roi: '210%' }
@@ -107,7 +130,8 @@ router.get('/', async (req, res) => {
       averageOrderValue,
       topSellingProducts: topProducts,
       customerSegments,
-      marketingEffectiveness
+      marketingEffectiveness: marketingEffectiveness.length > 0 ? 
+        marketingEffectiveness : defaultMarketingData
     });
     
   } catch (err) {

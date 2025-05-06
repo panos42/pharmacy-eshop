@@ -27,21 +27,35 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
   
-  const login = async (email, password) => {
+// In AuthContext.js
+const login = async (email, password) => {
+  try {
     const response = await axios.post('http://localhost:3000/auth/login', { email, password });
     const { token, isAdmin } = response.data;
+    
+    // Store tokens
     localStorage.setItem('token', token);
-    localStorage.setItem('isAdmin', String(isAdmin)); // Store as string
-  
+    localStorage.setItem('isAdmin', String(isAdmin));
+    
+    // Fetch user data with the token
     const userResponse = await axios.get('http://localhost:3000/auth/me', {
       headers: { Authorization: `Bearer ${token}` }
     });
     
-    // Make sure user object includes admin status
-    const user = {...userResponse.data, isAdmin};
+    // Create complete user object
+    const user = {
+      ...userResponse.data,
+      isAdmin,
+      _id: userResponse.data._id || userResponse.data.id // Handle different response formats
+    };
+    
     setCurrentUser(user);
     return user;
-  };
+  } catch (error) {
+    console.error('Login error:', error);
+    throw error;
+  }
+};
   
 // Also update logout function to clear admin status
 const logout = () => {
@@ -59,7 +73,8 @@ const logout = () => {
     login,
     logout,
     register,
-    isAuthenticated: !!currentUser
+    isAuthenticated: !!currentUser,
+    loading
   };
   
   return (

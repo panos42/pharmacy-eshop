@@ -40,6 +40,13 @@ app.use('/users', userRoutes);
 // In index.js, add:
 const analyticsRoutes = require('./routes/analytics');
 app.use('/analytics', analyticsRoutes);
+// In index.js, add these lines after your other route configurations:
+
+const orderRoutes = require('./routes/orders');
+app.use('/orders', orderRoutes);
+
+const visitRoutes = require('./routes/visits');
+app.use('/visits', visitRoutes);
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
