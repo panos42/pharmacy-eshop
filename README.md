@@ -16,7 +16,13 @@ node index.js
 cd documents/sites/pharmacy-app/pharmacy-frontend
 npm start   
 
-
+TO-DO : 
+1) Payments api
+2) improve design
+3) better product page and inventory (img,description) management
+4) more filters and product tags
+5) security checks
+ 
 <img width="1710" alt="Screenshot 2025-05-07 at 11 13 48 PM" src="https://github.com/user-attachments/assets/91d57967-3515-471e-b65c-bfa627bd5130" />
 
 **Admin Page with analytics tab**
