@@ -14,8 +14,7 @@ node index.js
 **REACT FRONT-END**
 
 cd documents/sites/pharmacy-app/pharmacy-frontend
-npm start    
-(base) ➜  pharmacy-frontend git:(main) ✗ npm start    
+npm start   
 
 
 <img width="1710" alt="Screenshot 2025-05-07 at 11 13 48 PM" src="https://github.com/user-attachments/assets/91d57967-3515-471e-b65c-bfa627bd5130" />
