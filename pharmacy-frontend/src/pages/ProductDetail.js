@@ -16,7 +16,7 @@ const ProductDetail = () => {
 // In ProductDetail.js, check the useEffect section:
 useEffect(() => {
   setLoading(true);
-  axios.get(`http://localhost:3000/products/${id}`)
+  axios.get(`http://localhost:3001/products/${id}`)
     .then(res => {
       setProduct(res.data);
       setLoading(false);
@@ -70,7 +70,20 @@ useEffect(() => {
       
       <div className="product-detail">
         <div className="product-image-large">
-          <img src={`https://placehold.co/600x400?text=${product.name}`} alt={product.name} />
+        <img 
+            src={`/cached_product_images/${product.image}`} 
+            alt={product.name}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = `https://placehold.co/300x200?text=${product.name}`;
+            }}
+          />
+
+
+
+
+
+          {/* <img src={`https://placehold.co/600x400?text=${product.name}`} alt={product.name} /> */}
         </div>
         
         <div className="product-info-detailed">

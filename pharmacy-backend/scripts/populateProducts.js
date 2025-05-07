@@ -13,7 +13,9 @@ const pharmacyProducts = [
     category: "Pain Relief",
     description: "Pain reliever and fever reducer for adults and children over 12 years. Relieves minor aches and pains due to headache, muscular aches, backache, minor arthritis pain, toothache, and menstrual cramps.",
     inStock: true,
-    tags: ["pain relief", "anti-inflammatory", "fever reducer", "OTC"]
+    tags: ["pain relief", "anti-inflammatory", "fever reducer", "OTC"],
+    image: "product1.png", // Image reference
+
   },
   {
     name: "Acetaminophen 500mg",
@@ -21,7 +23,9 @@ const pharmacyProducts = [
     category: "Pain Relief",
     description: "Pain reliever and fever reducer for adults and children over 12 years. Used for temporary relief of minor aches and pains due to headache, muscular aches, backache, minor arthritis pain, toothache, and menstrual cramps.",
     inStock: true,
-    tags: ["pain relief", "fever reducer", "OTC", "headache"]
+    tags: ["pain relief", "fever reducer", "OTC", "headache"],
+    image: "product2.png", // Image reference
+
   },
   {
     name: "Aspirin 325mg",
@@ -29,7 +33,9 @@ const pharmacyProducts = [
     category: "Pain Relief",
     description: "Pain reliever, fever reducer, and anti-inflammatory. Also used as a blood thinner for prevention of heart attack and stroke in high-risk patients.",
     inStock: true,
-    tags: ["pain relief", "anti-inflammatory", "blood thinner", "OTC"]
+    tags: ["pain relief", "anti-inflammatory", "blood thinner", "OTC"],
+    image: "product3.png", // Image reference
+
   },
   {
     name: "Vitamin D3 1000IU",
@@ -37,7 +43,9 @@ const pharmacyProducts = [
     category: "Vitamins & Supplements",
     description: "Essential vitamin that helps maintain strong bones and supports immune function. Helps with calcium absorption and bone health.",
     inStock: true,
-    tags: ["vitamin", "bone health", "immune support", "supplements"]
+    tags: ["vitamin", "bone health", "immune support", "supplements"],
+    image: "product4.png", // Image reference
+
   },
   {
     name: "Vitamin C 500mg",
@@ -45,7 +53,9 @@ const pharmacyProducts = [
     category: "Vitamins & Supplements",
     description: "Antioxidant vitamin that supports immune function and collagen production. Helps maintain healthy skin, blood vessels, bones and cartilage.",
     inStock: true,
-    tags: ["vitamin", "immune support", "antioxidant", "supplements"]
+    tags: ["vitamin", "immune support", "antioxidant", "supplements"],
+    image: "product4.png", // Image reference
+
   },
   {
     name: "Multivitamin Daily",
@@ -53,7 +63,9 @@ const pharmacyProducts = [
     category: "Vitamins & Supplements",
     description: "Comprehensive multivitamin formula containing essential vitamins and minerals to support overall health and wellbeing.",
     inStock: true,
-    tags: ["vitamin", "daily supplement", "wellness", "minerals"]
+    tags: ["vitamin", "daily supplement", "wellness", "minerals"],
+    image: "product6.png", // Image reference
+
   },
   {
     name: "Omega-3 Fish Oil",
@@ -61,7 +73,9 @@ const pharmacyProducts = [
     category: "Vitamins & Supplements",
     description: "Supports heart health, brain function, and reduces inflammation. Contains EPA and DHA essential fatty acids.",
     inStock: true,
-    tags: ["supplements", "heart health", "brain health", "fatty acids"]
+    tags: ["supplements", "heart health", "brain health", "fatty acids"],
+    image: "product1.png", // Image reference
+
   },
   {
     name: "Cetirizine 10mg",
@@ -69,7 +83,9 @@ const pharmacyProducts = [
     category: "Allergy Relief",
     description: "24-hour relief from allergy symptoms like sneezing, runny nose, itchy eyes, and throat. Non-drowsy formula.",
     inStock: true,
-    tags: ["allergy", "antihistamine", "non-drowsy", "OTC"]
+    tags: ["allergy", "antihistamine", "non-drowsy", "OTC"],
+    image: "product1.png", // Image reference
+
   },
   {
     name: "Loratadine 10mg",
@@ -77,7 +93,9 @@ const pharmacyProducts = [
     category: "Allergy Relief",
     description: "24-hour relief from allergy symptoms like sneezing, runny nose, itchy eyes, and throat. Non-drowsy formula.",
     inStock: true,
-    tags: ["allergy", "antihistamine", "non-drowsy", "OTC"]
+    tags: ["allergy", "antihistamine", "non-drowsy", "OTC"],
+    image: "product1.png", // Image reference
+
   },
   {
     name: "Diphenhydramine 25mg",
@@ -85,7 +103,8 @@ const pharmacyProducts = [
     category: "Allergy Relief",
     description: "Antihistamine providing relief from allergy symptoms. May cause drowsiness and can be used as a sleep aid.",
     inStock: true,
-    tags: ["allergy", "antihistamine", "sleep aid", "drowsy"]
+    tags: ["allergy", "antihistamine", "sleep aid", "drowsy"],
+    image: "product1.png", // Image reference
   },
   {
     name: "Amoxicillin 500mg",
@@ -93,7 +112,9 @@ const pharmacyProducts = [
     category: "Antibiotics",
     description: "Prescription antibiotic used to treat bacterial infections. Requires a valid prescription.",
     inStock: false,
-    tags: ["antibiotic", "prescription", "bacterial infection"]
+    tags: ["antibiotic", "prescription", "bacterial infection"],
+    image: "product1.png", // Image reference
+
   },
   {
     name: "Azithromycin 250mg",
@@ -101,7 +122,9 @@ const pharmacyProducts = [
     category: "Antibiotics",
     description: "Prescription antibiotic used to treat bacterial infections. Requires a valid prescription.",
     inStock: false,
-    tags: ["antibiotic", "prescription", "bacterial infection", "z-pack"]
+    tags: ["antibiotic", "prescription", "bacterial infection", "z-pack"],
+    image: "product1.png", // Image reference
+
   },
   {
     name: "Metformin 500mg",
@@ -109,7 +132,9 @@ const pharmacyProducts = [
     category: "Diabetes",
     description: "Prescription medication for type 2 diabetes. Requires a valid prescription.",
     inStock: false,
-    tags: ["diabetes", "prescription", "blood sugar"]
+    tags: ["diabetes", "prescription", "blood sugar"],    
+    image: "product1.png", // Image reference
+
   },
   {
     name: "Lisinopril 10mg",
@@ -117,7 +142,9 @@ const pharmacyProducts = [
     category: "Blood Pressure",
     description: "Prescription medication for high blood pressure and heart failure. Requires a valid prescription.",
     inStock: false,
-    tags: ["blood pressure", "prescription", "heart", "ACE inhibitor"]
+    tags: ["blood pressure", "prescription", "heart", "ACE inhibitor"],
+    image: "product1.png", // Image reference
+
   },
   {
     name: "Atorvastatin 20mg",
@@ -125,7 +152,9 @@ const pharmacyProducts = [
     category: "Cholesterol",
     description: "Prescription medication to lower cholesterol levels. Requires a valid prescription.",
     inStock: false,
-    tags: ["cholesterol", "prescription", "statin", "heart health"]
+    tags: ["cholesterol", "prescription", "statin", "heart health"],
+    image: "product1.png", // Image reference
+
   },
   {
     name: "First Aid Kit",
@@ -133,7 +162,9 @@ const pharmacyProducts = [
     category: "First Aid",
     description: "Comprehensive first aid kit containing bandages, antiseptic wipes, gauze, tape, scissors, and more.",
     inStock: true,
-    tags: ["first aid", "emergency", "bandages", "medical supplies"]
+    tags: ["first aid", "emergency", "bandages", "medical supplies"],
+    image: "product1.png", // Image reference
+
   },
   {
     name: "Adhesive Bandages",
@@ -141,7 +172,9 @@ const pharmacyProducts = [
     category: "First Aid",
     description: "Pack of 50 assorted size adhesive bandages for minor cuts and scrapes.",
     inStock: true,
-    tags: ["first aid", "bandages", "wound care"]
+    tags: ["first aid", "bandages", "wound care"],
+    image: "product1.png", // Image reference
+
   },
   {
     name: "Hydrogen Peroxide 3%",
@@ -149,7 +182,9 @@ const pharmacyProducts = [
     category: "First Aid",
     description: "Antiseptic solution for cleaning minor wounds and preventing infection.",
     inStock: true,
-    tags: ["first aid", "antiseptic", "wound care", "cleaning"]
+    tags: ["first aid", "antiseptic", "wound care", "cleaning"],
+    image: "product1.png", // Image reference
+
   },
   {
     name: "Digital Thermometer",
@@ -157,7 +192,9 @@ const pharmacyProducts = [
     category: "Health Devices",
     description: "Digital thermometer for accurate temperature readings. Easy to read LCD display.",
     inStock: true,
-    tags: ["thermometer", "device", "temperature", "fever"]
+    tags: ["thermometer", "device", "temperature", "fever"],
+    image: "product1.png", // Image reference
+
   },
   {
     name: "Blood Pressure Monitor",
@@ -165,7 +202,9 @@ const pharmacyProducts = [
     category: "Health Devices",
     description: "Digital blood pressure monitor for home use. Easy to use with large display.",
     inStock: true,
-    tags: ["blood pressure", "device", "monitoring", "heart health"]
+    tags: ["blood pressure", "device", "monitoring", "heart health"],
+    image: "product1.png", // Image reference
+
   },
   {
     name: "Glucose Meter",
@@ -173,7 +212,9 @@ const pharmacyProducts = [
     category: "Health Devices",
     description: "Digital glucose meter for monitoring blood sugar levels. Fast and accurate results.",
     inStock: true,
-    tags: ["diabetes", "device", "glucose", "monitoring"]
+    tags: ["diabetes", "device", "glucose", "monitoring"],
+    image: "product1.png", // Image reference
+
   },
   {
     name: "Hand Sanitizer",
@@ -181,7 +222,9 @@ const pharmacyProducts = [
     category: "Personal Care",
     description: "70% alcohol hand sanitizer that kills 99.9% of germs. Travel size.",
     inStock: true,
-    tags: ["sanitizer", "hygiene", "travel", "antibacterial"]
+    tags: ["sanitizer", "hygiene", "travel", "antibacterial"],
+    image: "product1.png", // Image reference
+
   },
   {
     name: "Facial Tissues",
@@ -189,7 +232,9 @@ const pharmacyProducts = [
     category: "Personal Care",
     description: "Box of 100 soft, 2-ply facial tissues.",
     inStock: true,
-    tags: ["tissues", "personal care", "hygiene"]
+    tags: ["tissues", "personal care", "hygiene"],
+    image: "product1.png", // Image reference
+
   },
   {
     name: "Sunscreen SPF 50",
@@ -197,7 +242,9 @@ const pharmacyProducts = [
     category: "Skin Care",
     description: "Broad-spectrum SPF 50 sunscreen lotion. Water-resistant for up to 80 minutes.",
     inStock: true,
-    tags: ["sunscreen", "skin care", "protection", "SPF"]
+    tags: ["sunscreen", "skin care", "protection", "SPF"],
+    image: "product1.png", // Image reference
+
   },
   {
     name: "Moisturizing Lotion",
@@ -205,7 +252,9 @@ const pharmacyProducts = [
     category: "Skin Care",
     description: "Daily moisturizing lotion for dry, sensitive skin. Fragrance-free.",
     inStock: true,
-    tags: ["moisturizer", "skin care", "sensitive skin", "fragrance-free"]
+    tags: ["moisturizer", "skin care", "sensitive skin", "fragrance-free"],
+    image: "product1.png", // Image reference
+
   },
   {
     name: "Lip Balm",
@@ -213,7 +262,9 @@ const pharmacyProducts = [
     category: "Skin Care",
     description: "Moisturizing lip balm with SPF 15 protection. Soothes dry, chapped lips.",
     inStock: true,
-    tags: ["lip care", "SPF", "skin care", "moisturizer"]
+    tags: ["lip care", "SPF", "skin care", "moisturizer"],
+    image: "product1.png", // Image reference
+
   },
   {
     name: "Cough Syrup",
@@ -221,7 +272,9 @@ const pharmacyProducts = [
     category: "Cold & Flu",
     description: "Relieves cough due to minor throat and bronchial irritation. For adults and children over 12 years.",
     inStock: true,
-    tags: ["cough", "cold", "syrup", "respiratory"]
+    tags: ["cough", "cold", "syrup", "respiratory"],
+    image: "product1.png", // Image reference
+
   },
   {
     name: "Nasal Decongestant",
@@ -229,7 +282,9 @@ const pharmacyProducts = [
     category: "Cold & Flu",
     description: "Provides temporary relief of nasal and sinus congestion due to the common cold, hay fever, or other upper respiratory allergies.",
     inStock: true,
-    tags: ["decongestant", "cold", "sinus", "nasal"]
+    tags: ["decongestant", "cold", "sinus", "nasal"],
+    image: "product1.png", // Image reference
+
   },
   {
     name: "Throat Lozenges",
@@ -237,7 +292,9 @@ const pharmacyProducts = [
     category: "Cold & Flu",
     description: "Temporarily relieves minor sore throat pain and cough associated with a cold.",
     inStock: true,
-    tags: ["throat", "cough", "cold", "lozenge"]
+    tags: ["throat", "cough", "cold", "lozenge"],
+    image: "product1.png", // Image reference
+
   }
 ];
 

@@ -1,30 +1,31 @@
-// Cart.js
+// Cart.js - Updated version with proper imports and function usage
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/cart.css';
-import { useAuth } from '../contexts/AuthContext'; // Import the auth context
+import { useAuth } from '../contexts/AuthContext';
 
 const Cart = () => {
   const navigate = useNavigate();
-  const { currentUser, isAuthenticated, loading, logout } = useAuth();
-  const isLoggedIn = !!localStorage.getItem('token');
+  // Get all needed functions from useAuth
+  const { currentUser, loading, logout, isAuthenticated, refreshUserData } = useAuth();
+  const isLoggedIn = isAuthenticated();
 
-  useEffect(() => {
-    console.log('🧠 Cart mounted - Auth loading:', loading);
-    console.log('👤 Current user:', currentUser);
-    console.log('✅ isAuthenticated:', isLoggedIn);
-  }, [loading, currentUser, isLoggedIn]);
-  
-  if (loading) {
-    return <div>Loading authentication status...</div>;
-  }
-  
-  // Initialize cart items from localStorage
+  // Initialize cart items from localStorage - MOVED BEFORE conditional rendering
   const [cartItems, setCartItems] = useState(() => {
     const savedCart = localStorage.getItem('cart');
     return savedCart ? JSON.parse(savedCart) : [];
   });
+
+  useEffect(() => {
+    console.log('🧠 Cart mounted - Auth loading:', loading);
+    console.log('👤 Current user:', currentUser);
+    console.log('✅ isAuthenticated:', isAuthenticated());
+  }, [loading, currentUser, isAuthenticated]);
+  
+  if (loading) {
+    return <div>Loading authentication status...</div>;
+  }
 
   const removeItem = (id) => {
     const updatedCart = cartItems.filter(item => item._id !== id);
@@ -46,39 +47,48 @@ const Cart = () => {
     return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
   };
 
+  // Updated handleCheckout function that properly uses the auth context
   const handleCheckout = async () => {
-    // Wait until auth is fully loaded
-    if (loading) {
-      alert("Checking authentication status... Please wait.");
+    // Use the isAuthenticated function from useAuth
+    if (!isLoggedIn) {
+      navigate('/login', { state: { returnPath: '/cart' } });
       return;
     }
-  
-    // If user is not authenticated, redirect to login
-    if (!currentUser) {
-      navigate('/login?redirect=checkout');
-      return;
-    }
-  
+    
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error("No auth token found.");
+      // We may have currentUser, but if not, refresh from server
+      let userId = currentUser?._id;
+      
+      if (!userId) {
+        const userData = await refreshUserData();
+        if (!userData) {
+          navigate('/login', { state: { returnPath: '/cart' } });
+          return;
+        }
+        userId = userData._id;
       }
-  
-      // Create the order
-      const response = await axios.post('http://localhost:3000/orders', {
-        userId: currentUser._id,
-        items: cartItems,
-        total: calculateTotal() + 3 // Include shipping
+
+      // Now proceed with order creation
+      const token = localStorage.getItem('token');
+      const response = await axios.post('http://localhost:3001/api/orders', {
+        userId,
+        items: cartItems.map(item => ({
+          productId: item._id, // this must be present and valid
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity
+        })),
+        total: calculateTotal() + 3 // shipping or tax
       }, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-  
+      
+
       // Record conversion analytics
-      await axios.post('http://localhost:3000/visits', {
-        userId: currentUser._id,
+      await axios.post('http://localhost:3001/visits', {
+        userId: userId,
         isConversion: true,
         source: localStorage.getItem('referrer') || 'direct'
       }, {
@@ -86,18 +96,18 @@ const Cart = () => {
           Authorization: `Bearer ${token}`
         }
       });
-  
+
       // Clear cart and redirect to order confirmation
       localStorage.removeItem('cart');
       setCartItems([]);
       navigate(`/order/${response.data._id}`);
     } catch (error) {
       console.error('Checkout error:', error);
-  
+
       if (error.response?.status === 401) {
-        // Unauthorized - likely token expired
+        // Token expired, redirect to login
         logout();
-        navigate('/login?redirect=checkout');
+        navigate('/login', { state: { returnPath: '/cart' } });
       } else {
         alert('Checkout failed. Please try again.');
       }
@@ -176,10 +186,9 @@ const Cart = () => {
           <span>{(calculateTotal() + 3).toFixed(2)}€</span>
         </div>
         
-        <button className="checkout-button" onClick={handleCheckout} disabled={loading}>
-        Proceed to Checkout
-      </button>
-
+        <button className="checkout-button" onClick={handleCheckout}>
+          Proceed to Checkout
+        </button>
         
         <Link to="/products" className="continue-shopping-link">
           Continue Shopping

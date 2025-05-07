@@ -30,7 +30,7 @@ const ProductList = () => {
 
   useEffect(() => {
     setLoading(true);
-    axios.get('http://localhost:3000/products')
+    axios.get('http://localhost:3001/products')
       .then(res => {
         setProducts(res.data);
         
@@ -276,8 +276,14 @@ const ProductList = () => {
               {filteredProducts.map(product => (
                 <div className="product-card" key={product._id}>
                   <div className="product-image">
-                    {/* Using a placeholder image */}
-                    <img src={`https://placehold.co/300x200?text=${product.name}`} alt={product.name} />
+
+                  <img require
+            src={`/cached_product_images/${product.image}`} // Use the product image filename from API
+            alt={product.name}
+            className="product-image"
+          />
+
+
                   </div>
                   <div className="product-info">
                     <h3>{product.name}</h3>

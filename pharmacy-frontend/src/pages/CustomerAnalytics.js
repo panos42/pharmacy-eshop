@@ -15,7 +15,7 @@ const CustomerAnalytics = () => {
   const fetchAnalytics = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`http://localhost:3000/analytics?timeRange=${timeRange}`);
+      const response = await axios.get(`http://localhost:3001/analytics?timeRange=${timeRange}`);
       setAnalyticsData(response.data);
       setLoading(false);
     } catch (err) {

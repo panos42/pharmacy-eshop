@@ -49,7 +49,7 @@ export default function Register() {
         isAdmin: form.isAdmin
       };
       
-      const res = await axios.post('http://localhost:3000/auth/register', payload);
+      const res = await axios.post('http://localhost:3001/auth/register', payload);
       alert('Registration successful! Please login.');
       navigate('/login');
     } catch (err) {

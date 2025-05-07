@@ -12,6 +12,7 @@ import Cart from './pages/Cart';
 import AdminPanel from './pages/AdminPanel';
 import { AuthProvider } from './contexts/AuthContext'; // ✅ Import AuthProvider
 import './styles/main.css';
+import OrderDetail from './pages/OrderDetails';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/order/:id" element={<OrderDetail />} />
               <Route path="/admin" element={<AdminPanel />} />
             </Routes>
           </main>

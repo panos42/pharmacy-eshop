@@ -1,8 +1,9 @@
-// Login.js
+// Login.js - updated to handle return paths
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/auth.css';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -11,6 +12,8 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const message = location.state?.message;
+  const returnPath = location.state?.returnPath || '/products';
+  const { refreshUserData } = useAuth(); // ✅ Add this line
 
   const handleChange = (e) => {
     setForm({
@@ -19,37 +22,38 @@ export default function Login() {
     });
   };
 
-// In Login.js - update handleSubmit function
-// In Login.js - update handleSubmit
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError('');
-  setLoading(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
   
-  try {
-    const res = await axios.post('http://localhost:3000/auth/login', form);
-    
-    // Make sure we're getting the isAdmin value from the response
-    console.log("Login response:", res.data); // Debug: check what's in the response
-    
-    // Store token
-    localStorage.setItem('token', res.data.token);
-    
-    // Store admin status - make sure it's a string "true" or "false"
-    localStorage.setItem('isAdmin', String(res.data.isAdmin));
-    
-    // Redirect based on admin status
-    if (res.data.isAdmin) {
-      navigate('/admin');
-    } else {
-      navigate('/products');
+    try {
+      const res = await axios.post('http://localhost:3001/auth/login', form);
+  
+      console.log("Login response:", res.data);
+  
+      // Store token
+      localStorage.setItem('token', res.data.token);
+  
+      // Store admin status
+      localStorage.setItem('isAdmin', String(res.data.isAdmin));
+  
+      // ✅ Refresh the user context immediately after storing the token
+      await refreshUserData();
+  
+      // Redirect based on admin status or return path
+      if (res.data.isAdmin && returnPath === '/products') {
+        navigate('/admin');
+      } else {
+        navigate(returnPath);
+      }
+    } catch (err) {
+      setError(err.response?.data?.error || 'Login failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    setError(err.response?.data?.error || 'Login failed. Please try again.');
-  } finally {
-    setLoading(false);
-  }
-};
+  };
+  
 
   return (
     <div className="auth-container">

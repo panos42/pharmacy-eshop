@@ -78,4 +78,20 @@ router.patch('/:id', async (req, res) => {
   }
 });
 
+
+// routes/orders.js
+router.get('/api/orders/:id', async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+    res.json(order);
+  } catch (err) {
+    console.error('Error fetching order:', err);
+    res.status(500).json({ error: 'Failed to fetch order' });
+  }
+});
+
+
 module.exports = router;

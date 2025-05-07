@@ -3,10 +3,12 @@ const mongoose = require('mongoose');
 const productSchema = new mongoose.Schema({
   name: String,
   price: Number,
-  category: String,
   description: String,
   inStock: Boolean,
-  tags: [String]  // Add tags array to the schema
+  category: String,
+  image: String,  // Add this field for the image filename
 });
 
-module.exports = mongoose.model('Product', productSchema);
+const Product = mongoose.model('Product', productSchema);
+
+module.exports = Product;

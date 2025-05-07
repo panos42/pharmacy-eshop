@@ -22,7 +22,7 @@ const InventoryManagement = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('http://localhost:3000/products');
+      const res = await axios.get('http://localhost:3001/products');
       setProducts(res.data);
       setLoading(false);
     } catch (err) {
@@ -38,7 +38,7 @@ const InventoryManagement = () => {
 
   const handleSaveEdit = async () => {
     try {
-      await axios.put(`http://localhost:3000/products/${editingProduct._id}`, editingProduct);
+      await axios.put(`http://localhost:3001/products/${editingProduct._id}`, editingProduct);
       setProducts(products.map(p => p._id === editingProduct._id ? editingProduct : p));
       setEditingProduct(null);
       alert('Product updated successfully!');
@@ -55,7 +55,7 @@ const InventoryManagement = () => {
   const handleDeleteProduct = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        await axios.delete(`http://localhost:3000/products/${id}`);
+        await axios.delete(`http://localhost:3001/products/${id}`);
         setProducts(products.filter(p => p._id !== id));
         alert('Product deleted successfully!');
       } catch (err) {
@@ -82,7 +82,7 @@ const InventoryManagement = () => {
         price: parseFloat(newProduct.price)
       };
       
-      const res = await axios.post('http://localhost:3000/products', productToAdd);
+      const res = await axios.post('http://localhost:3001/products', productToAdd);
       setProducts([...products, res.data]);
       setNewProduct({
         name: '',
