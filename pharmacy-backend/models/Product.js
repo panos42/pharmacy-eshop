@@ -6,9 +6,9 @@ const productSchema = new mongoose.Schema({
   description: String,
   inStock: Boolean,
   category: String,
-  image: String,  // Add this field for the image filename
+  image: String,
+  tags: [String] 
 });
 
 const Product = mongoose.model('Product', productSchema);
-
 module.exports = Product;

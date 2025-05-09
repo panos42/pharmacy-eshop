@@ -1,4 +1,4 @@
-// ProductList.js - Updated layout
+// ProductList.js - Updated with price filtering
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -13,6 +13,8 @@ const ProductList = () => {
   const [tagFilters, setTagFilters] = useState([]);
   const [categories, setCategories] = useState([]);
   const [availableTags, setAvailableTags] = useState([]);
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
+  const [priceFilter, setPriceFilter] = useState({ min: 0, max: 1000 });
   const location = useLocation();
 
   // Get search query from URL
@@ -28,33 +30,56 @@ const ProductList = () => {
     setSearchTerm(getSearchQuery());
   }, [location.search]);
 
-  useEffect(() => {
-    setLoading(true);
-    axios.get('http://localhost:3001/products')
-      .then(res => {
-        setProducts(res.data);
-        
-        // Extract unique categories
-        const uniqueCategories = [...new Set(res.data.map(p => p.category))];
-        setCategories(uniqueCategories);
-        
-        // Extract all unique tags from products
-        let allTags = [];
-        res.data.forEach(product => {
-          if (product.tags && Array.isArray(product.tags)) {
-            allTags = [...allTags, ...product.tags];
-          }
-        });
-        setAvailableTags([...new Set(allTags)]);
-        
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('❌ Error fetching products:', err);
-        setError('Failed to load products. Please try again later.');
-        setLoading(false);
+// In ProductList.js, update the useEffect that fetches products:
+
+useEffect(() => {
+  setLoading(true);
+  axios.get('http://localhost:3001/products')
+    .then(res => {
+      // Log the first product to check if tags are coming through
+      console.log('First product data:', res.data[0]);
+      
+      setProducts(res.data);
+      
+      // Extract unique categories
+      const uniqueCategories = [...new Set(res.data.map(p => p.category))];
+      setCategories(uniqueCategories);
+      
+      // Extract all unique tags from products
+      let allTags = [];
+      res.data.forEach(product => {
+        // Make sure we're accessing the tags property correctly
+        if (product.tags && Array.isArray(product.tags)) {
+          allTags = [...allTags, ...product.tags];
+        }
       });
-  }, []);
+      
+      // Log the collected tags
+      console.log('All extracted tags:', allTags);
+      
+      // Get unique tags and sort them alphabetically
+      const uniqueTags = [...new Set(allTags)].sort();
+      console.log('Unique tags:', uniqueTags);
+      
+      setAvailableTags(uniqueTags);
+      
+      // Calculate min and max price from all products
+      if (res.data.length > 0) {
+        const prices = res.data.map(p => p.price);
+        const minPrice = Math.floor(Math.min(...prices));
+        const maxPrice = Math.ceil(Math.max(...prices));
+        setPriceRange({ min: minPrice, max: maxPrice });
+        setPriceFilter({ min: minPrice, max: maxPrice });
+      }
+      
+      setLoading(false);
+    })
+    .catch(err => {
+      console.error('❌ Error fetching products:', err);
+      setError('Failed to load products. Please try again later.');
+      setLoading(false);
+    });
+}, []);
 
   // Apply filtering and searching
   useEffect(() => {
@@ -72,6 +97,11 @@ const ProductList = () => {
       );
     }
     
+    // Apply price filter
+    result = result.filter(p => 
+      p.price >= priceFilter.min && p.price <= priceFilter.max
+    );
+    
     // Apply search term if it exists
     if (searchTerm) {
       const searchLower = searchTerm.toLowerCase();
@@ -85,7 +115,7 @@ const ProductList = () => {
     }
     
     setFilteredProducts(result);
-  }, [products, categoryFilter, tagFilters, searchTerm]);
+  }, [products, categoryFilter, tagFilters, searchTerm, priceFilter]);
 
   const addToCart = (product) => {
     // Get existing cart from localStorage or initialize empty array
@@ -125,6 +155,7 @@ const ProductList = () => {
   const clearAllFilters = () => {
     setCategoryFilter('all');
     setTagFilters([]);
+    setPriceFilter(priceRange); // Reset price filter to full range
   };
 
   if (loading) return <div className="loading-spinner">Loading products...</div>;
@@ -152,7 +183,8 @@ const ProductList = () => {
           <h2>Narrow Choices</h2>
           
           {/* Your Selections section */}
-          {(categoryFilter !== 'all' || tagFilters.length > 0) && (
+          {(categoryFilter !== 'all' || tagFilters.length > 0 || 
+            priceFilter.min > priceRange.min || priceFilter.max < priceRange.max) && (
             <div className="your-selections">
               <h3>Your Selections</h3>
               <div className="selected-filters">
@@ -169,17 +201,81 @@ const ProductList = () => {
                     <button onClick={() => toggleTagFilter(tag)}>✕</button>
                   </div>
                 ))}
+                
+                {(priceFilter.min > priceRange.min || priceFilter.max < priceRange.max) && (
+                  <div className="filter-tag">
+                    €{priceFilter.min} - €{priceFilter.max}
+                    <button onClick={() => setPriceFilter(priceRange)}>✕</button>
+                  </div>
+                )}
               </div>
               
-              <div className="filter-question">
+              {/* <div className="filter-question">
                 <p>Do these items match what you were searching for?</p>
                 <div className="filter-actions">
                   <button className="btn-yes">YES</button>
                   <button className="btn-no">NO</button>
                 </div>
-              </div>
+              </div> */}
             </div>
           )}
+          
+          {/* Price filter */}
+          <div className="filter-section">
+            <h3>Price Range</h3>
+            <div className="price-filter">
+              <div className="price-inputs">
+                <div className="price-input">
+                  <label>Min €</label>
+                  <input
+                    type="number"
+                    value={priceFilter.min}
+                    onChange={(e) => setPriceFilter({...priceFilter, min: Number(e.target.value)})}
+                    min={priceRange.min}
+                    max={priceFilter.max}
+                  />
+                </div>
+                <div className="price-input">
+                  <label>Max €</label>
+                  <input
+                    type="number"
+                    value={priceFilter.max}
+                    onChange={(e) => setPriceFilter({...priceFilter, max: Number(e.target.value)})}
+                    min={priceFilter.min}
+                    max={priceRange.max}
+                  />
+                </div>
+              </div>
+              <div className="price-slider">
+                <input
+                  type="range"
+                  min={priceRange.min}
+                  max={priceRange.max}
+                  value={priceFilter.min}
+                  onChange={(e) => setPriceFilter({...priceFilter, min: Number(e.target.value)})}
+                  className="price-range-min"
+                />
+                <input
+                  type="range"
+                  min={priceRange.min}
+                  max={priceRange.max}
+                  value={priceFilter.max}
+                  onChange={(e) => setPriceFilter({...priceFilter, max: Number(e.target.value)})}
+                  className="price-range-max"
+                />
+              </div>
+              <div className="price-range-values">
+                <span>€{priceFilter.min}</span>
+                <span>€{priceFilter.max}</span>
+              </div>
+              <button 
+                className="apply-price-filter"
+                onClick={() => setPriceFilter({...priceFilter})}
+              >
+                Apply
+              </button>
+            </div>
+          </div>
           
           {/* Category filters */}
           <div className="filter-section">
@@ -212,24 +308,28 @@ const ProductList = () => {
             </ul>
           </div>
           
-          {/* Tag filters */}
-          <div className="filter-section">
-            <h3>Product Tags</h3>
-            <ul className="filter-list">
-              {availableTags.map(tag => (
-                <li key={tag}>
-                  <label className="filter-checkbox">
-                    <input
-                      type="checkbox"
-                      checked={tagFilters.includes(tag)}
-                      onChange={() => toggleTagFilter(tag)}
-                    />
-                    {tag}
-                  </label>
-                </li>
-              ))}
-            </ul>
-          </div>
+{/* Tag filters */}
+<div className="filter-section">
+  <h3>Product Tags</h3>
+  {availableTags.length > 0 ? (
+    <ul className="filter-list">
+      {availableTags.map(tag => (
+        <li key={tag}>
+          <label className="filter-checkbox">
+            <input
+              type="checkbox"
+              checked={tagFilters.includes(tag)}
+              onChange={() => toggleTagFilter(tag)}
+            />
+            {tag}
+          </label>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p>No tags available</p>
+  )}
+</div>
           
           {/* Add more filter sections as needed */}
           <div className="filter-section">
@@ -276,14 +376,11 @@ const ProductList = () => {
               {filteredProducts.map(product => (
                 <div className="product-card" key={product._id}>
                   <div className="product-image">
-
-                  <img require
-            src={`/cached_product_images/${product.image}`} // Use the product image filename from API
-            alt={product.name}
-            className="product-image"
-          />
-
-
+                    <img 
+                      src={`/cached_product_images/${product.image}`}
+                      alt={product.name}
+                      className="product-image"
+                    />
                   </div>
                   <div className="product-info">
                     <h3>{product.name}</h3>
